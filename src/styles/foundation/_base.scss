@@ -1,0 +1,62 @@
+// _base.scss
+
+// Typography
+
+
+:root {
+  --black: #222;
+  --white: #fff;
+  --default: #0751a5;
+  --orange: red;
+  --yellow: #d1b307;
+  --grey: #a0a3ad;
+  --grey2: #f9fafd;
+  --warn: #e71247;
+}
+
+/* ========= Reset ========= */
+
+*,
+*::before,
+*::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: inherit;
+}
+
+html {
+  box-sizing: border-box;
+  font-size: 62.5%;
+}
+
+body {
+  font-family: "Dosis", sans-serif;
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--black);
+  background-color: var(--white);
+}
+
+
+
+// Example of spacing utility classes
+.margin-top {
+  margin-top: $spacing-unit;
+}
+
+.margin-bottom {
+  margin-bottom: $spacing-unit;
+}
+
+.padding-left {
+  padding-left: $spacing-unit;
+}
+
+.padding-right {
+  padding-right: $spacing-unit;
+}
+
+// Container styles
+
+
+// Additional base styles can be added below
