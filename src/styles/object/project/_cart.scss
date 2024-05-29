@@ -293,14 +293,19 @@
     border : none;
  }
  .app__popup--cart-close {
-    position: relative;
+     position: absolute;
+     top : 0px;
+     left: 0px;
+   
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
  }
  .app__popup--cart-close-icon {
-    position: absolute;
+    cursor: pointer;
     font-size: 40px;
     color : black;
-    top : 0px;
-    left: 0px;
+    padding : 0px 20px;
  }
  .app__increase {
   font-size: 25px !important;
@@ -311,4 +316,7 @@
  .remove__item {
   font-size: 25px !important;
   color : red;
+ }
+ .app__view--product-container {
+   position: relative;
  }
