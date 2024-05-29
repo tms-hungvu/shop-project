@@ -1,10 +1,10 @@
 import useSWR from "swr";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
-import axios from "axios";
+
 import { isArray, isEmpty } from "lodash";
 
-
+import { axiosClient } from "@/api/axios";
 
 export function useCrud<T, K = T>(
   url: string,
@@ -16,9 +16,9 @@ export function useCrud<T, K = T>(
 
   const fetcher = useCallback(async (url: string) => {
     setIsLoading(true);
-    const response = await axios.get(url);
+    const response = await axiosClient.get(url);
     setIsLoading(false);
-    return  response.data;
+    return  response;
   }, []);
 
 
@@ -40,11 +40,11 @@ export function useCrud<T, K = T>(
   const create = useCallback(
     async (newItem: K, shouldRevalidate = false) => {
         setIsLoading(true);
-        const response = await axios.post(url, newItem);
+        const response = await axiosClient.post(url, newItem);
      
-        const result =  response.data as T
+        const result =  response ;
         if (data && mutate) {
-            let newData = data
+            let newData : any= data
             if (isArray(data)) {
                 newData = [...data, result]
             }
@@ -59,12 +59,12 @@ export function useCrud<T, K = T>(
 
 
         setIsLoading(true);
-        const response = await axios.put(urlUpdate, updatedItem);
+        const response = await axiosClient.put(urlUpdate, updatedItem);
        
-        const result =  response.data ;
+        const result : any =  response ;
        
         if (data && mutate) {
-            let newData = data
+            let newData : any = data
             if (isArray(data)) {
                 newData = data.map((item) => {
                     if(item.id == result.id){
@@ -82,9 +82,29 @@ export function useCrud<T, K = T>(
   
 
 
+    const remove = useCallback(async (shouldRevalidate = false, urlDelete : string, id : string | number): Promise<T> => {
+
+
+        setIsLoading(true);
+        const response = await axiosClient.delete(urlDelete);
+       
+        const result =  response.data ;
+       
+        if (data && mutate) {
+            let newData : any = data
+            if (isArray(data)) {
+                newData = data.filter(item => item.id != id)
+            }
+            await mutate(newData, shouldRevalidate);
+        }
+        setIsLoading(false);
+        return result;
+    }, [url, data, mutate, key])
+    
     const memoizedData = useMemo(() => (!isEmpty(data) ? data : []), [data])
 
     return {
+        remove,
         update,
         create,
         fetcher : { data: memoizedData, error, loading : isLoading, mutate },

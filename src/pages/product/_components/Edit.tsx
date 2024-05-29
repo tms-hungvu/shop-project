@@ -22,7 +22,7 @@ const schema = Joi.object({
 })
 
 export default function EditProduct({dataEdit, setEditTab, edit} : IEditProductProp){
-    const {update, fetcher} = useCrud(`${process.env.NEXT_PUBLIC_URL_API}/products`, 'PRODUCT_API');
+    const {update, fetcher} = useCrud(`products`, 'PRODUCT_API');
 
 
     const {reset, control, register, handleSubmit, formState: { errors }  } = useForm<IProduct>({
@@ -31,7 +31,7 @@ export default function EditProduct({dataEdit, setEditTab, edit} : IEditProductP
   
     const onSubmit = async (data : any) => {
       delete data.key;
-      await update(data, false, `${process.env.NEXT_PUBLIC_URL_API}/products/${data.id}`);
+      await update(data, false, `products/${data.id}`);
       toast.warning(`Edit product "${data.title}" success`);
       setEditTab(false);
     }

@@ -1,6 +1,6 @@
 import { IProduct } from "@/interface/product.interface";
 import { DeleteOutlined, FormOutlined } from "@ant-design/icons";
-import { Button, Table } from "antd";
+import { Button, Popconfirm, Table } from "antd";
 import { Tag } from 'antd';
 import classNames from "classnames/bind";
 import styles from "./Product.module.scss";
@@ -9,14 +9,16 @@ import { useCrud } from "@/hooks/useCrud";
 import { useState } from "react";
 import AddProduct from "./_components/Add";
 import EditProduct from "./_components/Edit";
+import { toast } from "react-toastify";
 const cx = classNames.bind(styles);
 export default function ListProduct() {
   const [add, setAddTab] = useState<boolean>(false);
   const [dataEdit, setDataEdit] = useState<IProduct | null>(null);
   const [edit, setEditTab] = useState<boolean>(false);
 
-  const {fetcher} = useCrud(`${process.env.NEXT_PUBLIC_URL_API}/products`, 'PRODUCT_API');
+  const {fetcher, remove} = useCrud(`products`, 'PRODUCT_API');
   
+
   
   const dataSource = fetcher.data.map((item : IProduct) => {
     return {
@@ -24,6 +26,11 @@ export default function ListProduct() {
         key : item.id
     }
   });
+
+  const confirm = async (id : number | string) => {
+      await remove(false,`products/${id}`, id );
+      toast.success(`Delete product success`)
+  };
 
   const columns = [
     {
@@ -60,9 +67,20 @@ export default function ListProduct() {
             }}  icon={<FormOutlined />} color="#d1b307">
               Edit
             </Tag>
-            <Tag  icon={<DeleteOutlined />} color="#EC2E21">
-                Delete
-            </Tag>
+
+                <Popconfirm
+                    disabled={fetcher.loading}
+                    title="Delete the product"
+                    description={`Are you sure to delete "${item.title}" ?`}
+                    onConfirm={() => confirm(String(item.id))}
+                    okText="Yes"
+                    cancelText="No"
+                  >
+                    <Tag  icon={<DeleteOutlined />} color="#EC2E21">
+                        Delete
+                    </Tag>
+                  </Popconfirm>
+            
         </div>,
       },
   ];
@@ -70,7 +88,7 @@ export default function ListProduct() {
   return (
    <>
    <EditProduct dataEdit={dataEdit} setEditTab={setEditTab} edit={edit}/>
-   <AddProduct add={add} setAddTab={setAddTab}/>
+   {add && <AddProduct add={true} setAddTab={setAddTab}/>}
     <div style={{ marginTop: "200px" }}>
       <div className="container">
         <Table 

@@ -20,7 +20,7 @@ const schema = Joi.object({
 })
 
 export default function AddProduct({setAddTab, add} : IAddProductProp){
-    const {create, fetcher} = useCrud(`${process.env.NEXT_PUBLIC_URL_API}/products`, 'PRODUCT_API');
+    const {create, fetcher} = useCrud(`products`, 'PRODUCT_API');
 
 
     const { control, register, handleSubmit, formState: { errors }  } = useForm<IProduct>({
@@ -34,7 +34,7 @@ export default function AddProduct({setAddTab, add} : IAddProductProp){
     }
   
     return (<>
-       <Modal title='Add product' open={add} onCancel={() => setAddTab(false)}>
+       <Modal title='Add product' open={true} onCancel={() => setAddTab(false)}>
         <Form
           layout="vertical" 
           name='nest-messages'
