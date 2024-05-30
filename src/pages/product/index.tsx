@@ -10,6 +10,9 @@ import { useState } from "react";
 import AddProduct from "./_components/Add";
 import EditProduct from "./_components/Edit";
 import { toast } from "react-toastify";
+import { Typography } from 'antd';
+
+const { Title } = Typography;
 const cx = classNames.bind(styles);
 export default function ListProduct() {
   const [add, setAddTab] = useState<boolean>(false);
@@ -20,7 +23,7 @@ export default function ListProduct() {
   
 
   
-  const dataSource = fetcher.data.map((item : IProduct) => {
+  const dataSource = fetcher?.data?.map((item : IProduct) => {
     return {
         ...item,
         key : item.id
@@ -28,7 +31,7 @@ export default function ListProduct() {
   });
 
   const confirm = async (id : number | string) => {
-      await remove(false,`products/${id}`, id );
+      await remove(false, id );
       toast.success(`Delete product success`)
   };
 
@@ -89,8 +92,9 @@ export default function ListProduct() {
    <>
    <EditProduct dataEdit={dataEdit} setEditTab={setEditTab} edit={edit}/>
    {add && <AddProduct add={true} setAddTab={setAddTab}/>}
-    <div style={{ marginTop: "200px" }}>
+    <div style={{ marginTop: "100px" }}>
       <div className="container">
+      <Title level={3}>List products</Title>
         <Table 
             loading={fetcher.loading}
             pagination={{ 

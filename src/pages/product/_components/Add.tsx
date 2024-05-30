@@ -1,36 +1,32 @@
-import { Button, Form, Input, Modal } from "antd";
+import { Button, Form, Modal } from "antd";
 import { Dispatch, SetStateAction } from "react";
-import { Controller, useForm } from 'react-hook-form';
+import {  useForm } from 'react-hook-form';
 import { joiResolver } from '@hookform/resolvers/joi';
 import Joi from 'joi';
 import { IProduct } from "@/interface/product.interface";
 import { useCrud } from "@/hooks/useCrud";
 import { toast } from "react-toastify";
+import { schemaProduct } from "@/components/inputs/product/product.schema";
+import BaseInput from "@/components/inputs/baseInput";
 interface IAddProductProp {
     setAddTab :  Dispatch<SetStateAction<boolean>>;
     add : boolean;
 }
 
-const schema = Joi.object({
-    id : Joi.allow(),
-    title : Joi.string().required(),
-    price : Joi.number().required(),
-    content : Joi.string().required(),
-    image : Joi.string().required()
-})
+
 
 export default function AddProduct({setAddTab, add} : IAddProductProp){
     const {create, fetcher} = useCrud(`products`, 'PRODUCT_API');
 
 
     const { control, register, handleSubmit, formState: { errors }  } = useForm<IProduct>({
-        resolver: joiResolver(schema),
+        resolver: joiResolver(schemaProduct),
     });
+
     const onSubmit = async (data : IProduct) => {
       await create(data as any, true);
       toast.success(`Add product "${data.title}" success`);
       setAddTab(false)
-
     }
   
     return (<>
@@ -42,37 +38,38 @@ export default function AddProduct({setAddTab, add} : IAddProductProp){
           style={{ maxWidth: 600 }}
           onFinish={handleSubmit(onSubmit)}
         >
-          <Form.Item  label='Title'  validateStatus={errors.title ? 'error' : ''} help={errors.title?.message}>
-                <Controller
-                    name="title"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         
+          <BaseInput 
+             control={control}
+             title="Title"
+             name="title"
+             messageError={errors.title?.message}
+             placeholder="Enter title"
+          />
 
-          <Form.Item  label='Price' validateStatus={errors.price ? 'error' : ''} help={errors.price?.message}>
-               <Controller
-                    name="price"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Price"
+             name="price"
+             messageError={errors.price?.message}
+             placeholder="Enter price"
+          />
 
-          <Form.Item label='Content' validateStatus={errors.content ? 'error' : ''} help={errors.content?.message} >
-                <Controller
-                    name="content"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Content"
+             name="content"
+             messageError={errors.content?.message}
+             placeholder="Enter content"
+          />
 
-          <Form.Item  label='Image' validateStatus={errors.image ? 'error' : ''} help={errors.image?.message} >
-                <Controller
-                    name="image"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Image"
+             name="image"
+             messageError={errors.image?.message}
+             placeholder="Enter url image"
+          />
 
 
           

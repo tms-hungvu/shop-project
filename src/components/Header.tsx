@@ -18,6 +18,7 @@ export default function Header(){
     return (<>
       <nav className="nav">
     <div className="nav__center container">
+     
       <Link href="/">
       <div className="nav__logo">
         <h1>Manchester<span>City</span></h1>
@@ -25,7 +26,8 @@ export default function Header(){
       </Link>
 
       <ul className="nav__list">
-        <a href="#" className="login">Login</a>
+        <Link href="/product" className="nav__list--item" >Manage Product</Link>
+        <Link href="/login" className="login">Login</Link>
 
         <Link href="/cart">
         <div className="app__cart--icon">

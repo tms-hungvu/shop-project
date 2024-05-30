@@ -1,0 +1,14 @@
+{
+  "users": [
+    {
+      "email": "vuminhhungltt9044@gmail.com",
+      "password": "$2a$10$91.w.j/8Q2TFre1GuGGmGenQeVFunLYHLZpWN9k15xnddAi33OHx6",
+      "id": 1
+    },
+    {
+      "email": "vuminhhungltt904@gmail.com",
+      "password": "$2a$10$uU29.t5YLvrYPqIpwtAom.vKZJY4GpjR/CU0fmWe1obsrdv/6Q38a",
+      "id": 2
+    }
+  ]
+}

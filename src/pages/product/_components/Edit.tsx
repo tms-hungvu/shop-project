@@ -6,32 +6,28 @@ import Joi from 'joi';
 import { IProduct } from "@/interface/product.interface";
 import { useCrud } from "@/hooks/useCrud";
 import { toast } from "react-toastify";
+import { schemaProduct } from "@/components/inputs/product/product.schema";
+import BaseInput from "@/components/inputs/baseInput";
 interface IEditProductProp {
     dataEdit : IProduct | null;
     setEditTab :  Dispatch<SetStateAction<boolean>>;
     edit : boolean;
 }
 
-const schema = Joi.object({
-    id : Joi.allow(),
-    key : Joi.allow(),
-    title : Joi.string().required(),
-    price : Joi.number().required(),
-    content : Joi.string().required(),
-    image : Joi.string().required()
-})
+
+
 
 export default function EditProduct({dataEdit, setEditTab, edit} : IEditProductProp){
     const {update, fetcher} = useCrud(`products`, 'PRODUCT_API');
 
 
     const {reset, control, register, handleSubmit, formState: { errors }  } = useForm<IProduct>({
-        resolver: joiResolver(schema),
+        resolver: joiResolver(schemaProduct),
     });
   
     const onSubmit = async (data : any) => {
       delete data.key;
-      await update(data, false, `products/${data.id}`);
+      await update(data, false);
       toast.warning(`Edit product "${data.title}" success`);
       setEditTab(false);
     }
@@ -50,39 +46,42 @@ export default function EditProduct({dataEdit, setEditTab, edit} : IEditProductP
           style={{ maxWidth: 600 }}
           onFinish={handleSubmit(onSubmit)}
         >
-          <Form.Item  label='Title'  validateStatus={errors.title ? 'error' : ''} help={errors.title?.message}>
-                <Controller
-                    name="title"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+          
+          <BaseInput 
+             control={control}
+             title="Title"
+             name="title"
+             messageError={errors.title?.message}
+             placeholder="Enter title"
+          />
 
-          <Form.Item  label='Price' validateStatus={errors.price ? 'error' : ''} help={errors.price?.message}>
-               <Controller
-                    name="price"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Price"
+             name="price"
+             messageError={errors.price?.message}
+             placeholder="Enter price"
+          />
 
-          <Form.Item label='Content' validateStatus={errors.content ? 'error' : ''} help={errors.content?.message} >
-                <Controller
-                    name="content"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Content"
+             name="content"
+             messageError={errors.content?.message}
+             placeholder="Enter content"
+          />
 
-          <Form.Item  label='Image' validateStatus={errors.image ? 'error' : ''} help={errors.image?.message} >
-                <Controller
-                    name="image"
-                    control={control}
-                    render={({ field }) => <Input {...field} />}
-                />
-          </Form.Item>
+         <BaseInput 
+             control={control}
+             title="Image"
+             name="image"
+             messageError={errors.image?.message}
+             placeholder="Enter url image"
+          />
 
-
+          <div>
+             <img src={dataEdit?.image} width={250}/>
+          </div>
           
           <Form.Item >
             <Button loading={fetcher.loading} disabled={fetcher.loading} danger  type="primary" htmlType='submit'>

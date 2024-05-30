@@ -4,8 +4,8 @@ import { useCallback, useEffect, useMemo, useState } from "react";
 
 import { isArray, isEmpty } from "lodash";
 
-import { axiosClient } from "@/api/axios";
-
+import productService from "@/services/product.service";
+import { IProduct } from "@/interface/product.interface";
 export function useCrud<T, K = T>(
   url: string,
   key: keyof T,
@@ -14,9 +14,9 @@ export function useCrud<T, K = T>(
   const [isLoading, setIsLoading] = useState<boolean>(false);
 
 
-  const fetcher = useCallback(async (url: string) => {
+  const fetcher = useCallback(async () => {
     setIsLoading(true);
-    const response = await axiosClient.get(url);
+    const response = await productService.getAll();
     setIsLoading(false);
     return  response;
   }, []);
@@ -40,8 +40,7 @@ export function useCrud<T, K = T>(
   const create = useCallback(
     async (newItem: K, shouldRevalidate = false) => {
         setIsLoading(true);
-        const response = await axiosClient.post(url, newItem);
-     
+        const response = await productService.create(newItem as IProduct);
         const result =  response ;
         if (data && mutate) {
             let newData : any= data
@@ -55,12 +54,12 @@ export function useCrud<T, K = T>(
     }, [url, data, mutate]);
 
 
-    const update = useCallback(async (updatedItem: T, shouldRevalidate = false, urlUpdate : string): Promise<T> => {
+    const update = useCallback(async (updatedItem: IProduct, shouldRevalidate = false): Promise<T> => {
 
 
         setIsLoading(true);
-        const response = await axiosClient.put(urlUpdate, updatedItem);
-       
+
+        const response = await productService.update(updatedItem as IProduct, Number(updatedItem.id) );
         const result : any =  response ;
        
         if (data && mutate) {
@@ -82,11 +81,11 @@ export function useCrud<T, K = T>(
   
 
 
-    const remove = useCallback(async (shouldRevalidate = false, urlDelete : string, id : string | number): Promise<T> => {
+    const remove = useCallback(async (shouldRevalidate = false,  id : string | number): Promise<T> => {
 
 
         setIsLoading(true);
-        const response = await axiosClient.delete(urlDelete);
+        const response = await productService.delete(id);
        
         const result =  response.data ;
        
