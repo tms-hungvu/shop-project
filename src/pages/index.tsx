@@ -7,8 +7,11 @@ import Slider from "@/components/Slider";
 
 import { IProduct } from "@/interface/product.interface";
 export const getStaticProps = async () => {
+
+  
   const res = await fetch(`${process.env.NEXT_PUBLIC_URL_API}/products`);
   const products = await res.json();
+
   return {
     props: {
       data : products,

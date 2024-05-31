@@ -17,7 +17,7 @@ interface IAddProductProp {
 
 export default function AddProduct({setAddTab, add} : IAddProductProp){
     const {create, fetcher} = useCrud(`products`, 'PRODUCT_API');
-
+  
 
     const { control, register, handleSubmit, formState: { errors }  } = useForm<IProduct>({
         resolver: joiResolver(schemaProduct),

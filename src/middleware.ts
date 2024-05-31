@@ -14,16 +14,17 @@ interface IAuth {
     }
 }
 export async function middleware(request: NextRequest) {
-    const cookie : IAuth | any = request.cookies.get('auth');
+    const cookie :  any = request.cookies.get('auth');
    
     if(!cookie || cookie.value == ''){
-        return NextResponse.redirect('http://localhost:3000/login')
+        return NextResponse.redirect('http://localhost:3000/login');
     }
     try {
-        const decoded = await jose.jwtVerify(cookie.value, new TextEncoder().encode("refresh_token"),)
-
+        const decoded : any = await jose.jwtVerify(cookie.value, new TextEncoder().encode("refresh_token"),)
+        if(decoded.payload.data.role != 1){
+            return NextResponse.redirect('http://localhost:3000/login');
+        }
       } catch (err) {
-        console.log(err)
-        return NextResponse.redirect('http://localhost:3000/login')
+        return NextResponse.redirect('http://localhost:3000/login');
       }
 }

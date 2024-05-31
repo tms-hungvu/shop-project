@@ -133,7 +133,7 @@
   .product__center {
     padding: 0 3rem;
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(30rem, 1fr));
+    grid-template-columns: repeat(3, 1fr);
     gap: 3rem 1rem;
   }
   
@@ -293,9 +293,15 @@
    width: 100vw;
    height: 100vh;
    background: #00000093;
+   animation-name: example;
+  animation-duration: 0.3s;
+  scale: 1;
+  transition: all 5s ease-in-out;
 
-
-
+}
+@keyframes example {
+  from {scale: 0;}
+  to {scale: 1;}
 }
 
 .app__view--product-container {

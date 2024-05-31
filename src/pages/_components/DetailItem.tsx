@@ -11,6 +11,7 @@ interface IDetailItemProp {
 }
 
 export default function DetailItem ({detail, setShow} : IDetailItemProp) {
+    const {state} = useContext<any>(AppContext);
     const router = useRouter();
     const {dispatch} = useContext<any>(AppContext);
     const handleAddToCart = (item : IProduct | undefined) => {
@@ -35,18 +36,18 @@ export default function DetailItem ({detail, setShow} : IDetailItemProp) {
     </div>
   
     <div className="app__view--product-container-left">
-         <img src={detail?.image} alt=""/>
+         <img src={state.web.item.image} alt=""/>
     </div>
     <div className="app__view--product-container-right">
         <span>
-        {detail?.title}
+        {state.web.item.title}
         </span>
   
-        <span className="app__view--product-container-right-price">${detail?.price}</span>
+        <span className="app__view--product-container-right-price">${state.web.item.price}</span>
   
-        <p>{detail?.content}</p>
+        <p>{state.web.item.content}</p>
   
-        <button onClick={() => handleAddToCart(detail)} className="add-to-cart-detail" > Add to cart</button>
+        <button onClick={() => handleAddToCart(state.web.item)} className="add-to-cart-detail" > Add to cart</button>
   
         <button onClick={() => setShow(false)} className="add-to-cart-detail-close"> Close</button>
     </div>

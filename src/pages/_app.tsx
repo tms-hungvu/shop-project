@@ -12,7 +12,7 @@ const swrConfig = {
   revalidateOnFocus: false,
   shouldRetryOnError: false
  }
-import useSWRMiddleware from "@/middleware/useMiddleware";
+
 export default function App({ Component, pageProps }: AppProps) {
   return <>
   <Head>

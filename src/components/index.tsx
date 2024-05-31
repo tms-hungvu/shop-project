@@ -9,7 +9,6 @@ interface IindexProp {
 export default function Index({children} : IindexProp){
    return (<>
         <Header />
-      
             {children}
         <Footer />
    
