@@ -24,8 +24,7 @@ export default function ListItem({data} : {data : IProduct[]}) {
     fetcher as SWRConfiguration<any> 
   );
 
-  const [detail, setDetail] = useState<IProduct>();
-  const [showDetail, setShow] = useState<boolean>(false);
+ 
   const {dispatch} = useContext<any>(AppContext);
   const {state} = useContext<any>(AppContext);
 
@@ -42,6 +41,7 @@ export default function ListItem({data} : {data : IProduct[]}) {
      toast.success(`Added "${item.title}" to cart`);
   }
   
+  console.log(state.web)
   if(error) {
     return <h1> Something went error</h1>
   }
@@ -64,7 +64,7 @@ export default function ListItem({data} : {data : IProduct[]}) {
   return (
     <>
     
-  {showDetail &&  <DetailItem detail={state.web.show} setShow={setShow} />}
+  {state.web.show &&  <DetailItem   />}
 
        {data?.map((item : IProduct, key : number) => (
          <div className="product" key={key}>
@@ -90,8 +90,6 @@ export default function ListItem({data} : {data : IProduct[]}) {
                    show : true,
                    item : item
                 }))
-                setShow(true);
-                setDetail(item);
                }} className="btn view view-click">
                  View
                </span>

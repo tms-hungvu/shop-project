@@ -5,12 +5,10 @@ import { useRouter } from 'next/router'
 import { AppContext } from "@/reducer/app.reducer";
 import { cartAdd } from "@/action/cart.action";
 import { toast } from "react-toastify";
-interface IDetailItemProp {
-    detail : IProduct | undefined;
-    setShow : Dispatch<SetStateAction<boolean>>;
-}
+import { webHiddenPopup } from "@/action/web.action";
 
-export default function DetailItem ({detail, setShow} : IDetailItemProp) {
+
+export default function DetailItem () {
     const {state} = useContext<any>(AppContext);
     const router = useRouter();
     const {dispatch} = useContext<any>(AppContext);
@@ -32,7 +30,7 @@ export default function DetailItem ({detail, setShow} : IDetailItemProp) {
     
     <div className="app__view--product-container">
     <div className="app__popup--cart-close">
-        <div onClick={() => setShow(false)} className="app__popup--cart-close-icon">&times;</div>
+        <div onClick={() => dispatch(webHiddenPopup(false))} className="app__popup--cart-close-icon">&times;</div>
     </div>
   
     <div className="app__view--product-container-left">
@@ -49,7 +47,7 @@ export default function DetailItem ({detail, setShow} : IDetailItemProp) {
   
         <button onClick={() => handleAddToCart(state.web.item)} className="add-to-cart-detail" > Add to cart</button>
   
-        <button onClick={() => setShow(false)} className="add-to-cart-detail-close"> Close</button>
+        <button onClick={() => dispatch(webHiddenPopup(false))} className="add-to-cart-detail-close"> Close</button>
     </div>
   </div>
    </section>)

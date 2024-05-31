@@ -10,11 +10,14 @@ import { joiResolver } from "@hookform/resolvers/joi";
 import { axiosClient } from "@/api/axios";
 import { IProduct } from "@/interface/product.interface";
 import { useRouter } from 'next/navigation';
+import { webSet } from "@/action/web.action";
 const schemaSearch = Joi.object({
   key : Joi.string().required()
 })
 
 export default function Header(){
+  const {dispatch} = useContext<any>(AppContext);
+  
   const { push } = useRouter();
   const [listAutoComplete, setAutoComplete] = useState<IProduct[]>([]);
   const [value, setValue] = useState("");
@@ -84,7 +87,10 @@ export default function Header(){
                    <ul className="">
 
                      {listAutoComplete.length != 0 && listAutoComplete.map((item, key) => (
-                        <li className="" key={key}>
+                        <li className="" key={key} onClick={() => dispatch(webSet({
+                            show : true,
+                            item : item
+                        }))}>
                         <div className="">
                             <img src={item.image} alt="" className=""  />
                             <span className="">{item.title}</span>
