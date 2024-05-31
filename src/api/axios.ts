@@ -1,11 +1,10 @@
 import  axios, {
     AxiosError,
     AxiosInstance,
-    AxiosRequestConfig,
     InternalAxiosRequestConfig,
     AxiosResponse,
 } from "axios";
-
+import Cookies from "js-cookie"
 
 var refreshingFunc : any = undefined;
 const isUnauthorizedError = (error : AxiosError) => { 
@@ -19,9 +18,8 @@ const checkErrorRefreshToken = (error : any) => {
     return status === 401 && data.message && data.message == 'refresh_token error';
  }
 const onRequest = (config: InternalAxiosRequestConfig | any): InternalAxiosRequestConfig => {
-    const { method, url } = config;
     
-    const authToken =  'sdfsf';
+    const authToken =  Cookies.get('auth');
     if(authToken){
         config.headers = {
             ...config.headers,
@@ -29,16 +27,9 @@ const onRequest = (config: InternalAxiosRequestConfig | any): InternalAxiosReque
         };
     }
   
-    if (method === "get") {
-      config.timeout = 15000;
-    }
     return config;
 };
 const onResponse = (response: AxiosResponse): AxiosResponse => {
-    const { method, url } = response.config;
-    const { status } = response;
-   
-  
     if (response && response.data) {
         return response.data;
     }
@@ -49,10 +40,7 @@ const onErrorResponse = async (error: AxiosError | Error): Promise<AxiosError> =
     
     if (axios.isAxiosError(error)) {
 
-      const originalConfig : any = error.config;
-      const { message } = error;
-      const { method, url } = error.config as AxiosRequestConfig;
-      const { statusText, status } = error.response as AxiosResponse ?? {};
+      const {  status } = error.response as AxiosResponse ?? {};
       
       const token = false;
       if(status === 403) window.location.href = "/login";
@@ -60,32 +48,7 @@ const onErrorResponse = async (error: AxiosError | Error): Promise<AxiosError> =
       if (!token || status != 401) return Promise.reject(error);
       
       if(checkErrorRefreshToken(error)) return Promise.reject(error);
-      try {
-       
-        // if (refreshingFunc == undefined){
-        //     refreshingFunc = renewToken();
-        // }
-        const [new_access_token, new_refresh_token] = await refreshingFunc;
-      
-        
-        originalConfig.headers.Authorization = `Bearer dsf`;
-        
-
-        try {
-            return await axiosClient.request(originalConfig);
-        } catch(innerError : any) {
-            if (isUnauthorizedError(innerError)) {
-                throw innerError;
-            }                  
-        }
-
-        } catch (err) {
-            
-          
-            alert('your refresh token and access token were expried, you have to login again !!!');
-        } finally {
-            refreshingFunc = undefined;
-        }
+   
     }
   
     return Promise.reject(error);

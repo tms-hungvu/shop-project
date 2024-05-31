@@ -8,6 +8,8 @@ import { useState } from "react";
 import { toast } from "react-toastify";
 import useCookie from "@/hooks/useCookie";
 import { useRouter } from 'next/router'
+import { jwtDecode } from "jwt-decode";
+import { IAuth } from "@/interface/auth.interface";
 export default function Login(){
     const router = useRouter();
     const [auth, setAuth] = useCookie("auth", "")
@@ -24,8 +26,9 @@ export default function Login(){
             const response = await axios.post("https://hungvu.site/login", data);
             if(response.data.status == 'success'){
                 setAuth(response.data.refresh_token);
-                toast.success(`Welcome to comeback`);
-                router.push('/product', undefined, { shallow: true })
+                const decoded : IAuth  = jwtDecode(response.data.refresh_token);
+                toast.success(`Hello ${decoded.data.name}`);
+                router.push('/', undefined, { shallow: true })
             }else {
                 toast.error('Email or password is incorrect')
             }

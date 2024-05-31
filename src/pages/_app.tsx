@@ -2,17 +2,17 @@ import "@/styles/app.scss";
 import type { AppProps } from "next/app";
 import Index from "@/components";
 import Head from "next/head";
-//import { SWRConfig } from 'swr';
 import { AppContextReducer } from "@/reducer/app.reducer";
 import { ToastContainer } from 'react-toastify';
   import 'react-toastify/dist/ReactToastify.css';
   import { SWRConfig } from 'swr'
-//const fetcher = (...args : [input: RequestInfo, init?: RequestInit]) => fetch(...args).then((res) => res.json())
+
 
 const swrConfig = {
   revalidateOnFocus: false,
   shouldRetryOnError: false
  }
+import useSWRMiddleware from "@/middleware/useMiddleware";
 export default function App({ Component, pageProps }: AppProps) {
   return <>
   <Head>
@@ -24,15 +24,14 @@ export default function App({ Component, pageProps }: AppProps) {
     <title>Shopping Cart </title>
   </Head>
   <SWRConfig value={swrConfig}>
-    <AppContextReducer>
-    
-    <Index>
-      <ToastContainer />
-      <Component {...pageProps} />
-    </Index>
+          <AppContextReducer>
+          
+          <Index>
+            <ToastContainer />
+            <Component {...pageProps} />
+          </Index>
 
-  </AppContextReducer>
-
+        </AppContextReducer>
   </SWRConfig>
 
 

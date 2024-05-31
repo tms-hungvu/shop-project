@@ -11,6 +11,8 @@ import AddProduct from "./_components/Add";
 import EditProduct from "./_components/Edit";
 import { toast } from "react-toastify";
 import { Typography } from 'antd';
+import { SWRConfig } from "swr";
+import useSWRMiddleware from "@/middleware/useMiddleware";
 
 const { Title } = Typography;
 const cx = classNames.bind(styles);
@@ -90,30 +92,32 @@ export default function ListProduct() {
 
   return (
    <>
-   <EditProduct dataEdit={dataEdit} setEditTab={setEditTab} edit={edit}/>
-   {add && <AddProduct add={true} setAddTab={setAddTab}/>}
-    <div style={{ marginTop: "100px" }}>
-      <div className="container">
-      <Title level={3}>List products</Title>
-        <Table 
-            loading={fetcher.loading}
-            pagination={{ 
-                defaultPageSize: 5, 
-                showSizeChanger: true, 
-                pageSizeOptions: ['5', '50', '100']
-            }} 
-            dataSource={dataSource}
-            columns={columns}
-            bordered
-         />
-         
-      </div>
-      <div className="container">
-        <Button type="primary" danger onClick={() => setAddTab(true)} >
-            Add product
-        </Button>
-      </div>
-    </div>
+    <SWRConfig value={{ use: [useSWRMiddleware] as any }}>
+        <EditProduct dataEdit={dataEdit} setEditTab={setEditTab} edit={edit}/>
+        {add && <AddProduct add={true} setAddTab={setAddTab}/>}
+          <div style={{ marginTop: "100px" }}>
+            <div className="container">
+            <Title level={3}>List products</Title>
+              <Table 
+                  loading={fetcher.loading}
+                  pagination={{ 
+                      defaultPageSize: 5, 
+                      showSizeChanger: true, 
+                      pageSizeOptions: ['5', '50', '100']
+                  }} 
+                  dataSource={dataSource}
+                  columns={columns}
+                  bordered
+              />
+              
+            </div>
+            <div className="container">
+              <Button type="primary" danger onClick={() => setAddTab(true)} >
+                  Add product
+              </Button>
+            </div>
+          </div>
+    </SWRConfig>
    </>
   );
 }
